@@ -1,0 +1,61 @@
+table time_series_fraud
+	lineageTag: 412a56e6-f957-4ab5-8a35-f0f1c02c378a
+
+	column step
+		dataType: int64
+		formatString: 0
+		lineageTag: 275d1790-5a73-4328-a707-df1b36f05ed6
+		summarizeBy: none
+		sourceColumn: step
+
+		annotation SummarizationSetBy = Automatic
+
+	column Total_Transactions
+		dataType: int64
+		formatString: 0
+		lineageTag: 15b6d229-9b0d-4dd3-b475-696dbbdc6a48
+		summarizeBy: none
+		sourceColumn: Total_Transactions
+
+		annotation SummarizationSetBy = Automatic
+
+	column Fraud_Transactions
+		dataType: double
+		lineageTag: 93a1fe9c-007b-4384-9449-0dd2b8ae2845
+		summarizeBy: none
+		sourceColumn: Fraud_Transactions
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Total_Amount
+		dataType: double
+		lineageTag: dd25fc15-d674-47dd-811c-a243922f1b4c
+		summarizeBy: none
+		sourceColumn: Total_Amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Fraud_Amount
+		dataType: double
+		lineageTag: 597b0a6b-1269-4942-a4c0-9942c1ff1226
+		summarizeBy: none
+		sourceColumn: Fraud_Amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition time_series_fraud = m
+		mode: import
+		source =
+				let
+				    Source = Odbc.DataSource("dsn=localhost", [HierarchicalNavigation=true]),
+				    fraud_analysis_Database = Source{[Name="fraud_analysis",Kind="Database"]}[Data],
+				    time_series_fraud_View = fraud_analysis_Database{[Name="time_series_fraud",Kind="View"]}[Data]
+				in
+				    time_series_fraud_View
+

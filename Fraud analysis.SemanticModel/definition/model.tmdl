@@ -1,0 +1,24 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-IN
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["fraud_data","transaction_summary","topriskyaccounts","time_series_fraud","fraudfundflow","fraudbytype"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table fraud_data
+ref table transaction_summary
+ref table topriskyaccounts
+ref table time_series_fraud
+ref table fraudfundflow
+ref table fraudbytype
+ref table Fraud_Percentage_Table
+
+ref cultureInfo en-US
+

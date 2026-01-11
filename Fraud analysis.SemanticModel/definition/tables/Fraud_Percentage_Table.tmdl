@@ -1,0 +1,50 @@
+table Fraud_Percentage_Table
+	lineageTag: 183e01b0-43df-4a5a-9107-acd0d4e94b11
+
+	measure 'Cumulative Fraud Transactions' = ```
+			
+			CALCULATE(
+			    SUM('time_series_fraud'[Fraud_Transactions]),
+			    FILTER(
+			        ALLSELECTED('time_series_fraud'[step]),
+			        'time_series_fraud'[step] <= MAX('time_series_fraud'[step])
+			    )
+			)
+			
+			```
+		lineageTag: 20427c35-a936-4dd5-993b-fea88eeae4e5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Type
+		lineageTag: 3e4d3646-1865-40b5-9c58-08f7813b7dee
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Type]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Fraud_Percentage
+		lineageTag: 05f05f95-d15b-461e-b53b-dd430b29a80d
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Fraud_Percentage]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Fraud_Percentage_Table = calculated
+		mode: import
+		source = ```
+				
+				SELECTCOLUMNS(
+				    fraudbytype,
+				    "Type", fraudbytype[Type],
+				    "Fraud_Percentage", fraudbytype[fraud_rate_percentage]
+				)
+				
+				```
+
+	annotation PBI_Id = f35272df9c3941248e86bae998240dda
+

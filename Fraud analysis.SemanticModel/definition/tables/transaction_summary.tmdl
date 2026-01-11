@@ -1,0 +1,47 @@
+table transaction_summary
+	lineageTag: ba456af0-10d8-490c-9e3a-6023df52430f
+
+	measure Non_Fraud = CALCULATE(SUM('Transaction_Summary'[Total_Transactions]) - SUM('Transaction_Summary'[Total_Fraud_Transactions]))
+		lineageTag: cb2e4633-cb9a-4eb1-b8fc-b9b0697b28ba
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Total_Transactions
+		dataType: int64
+		formatString: 0
+		lineageTag: a5be6eae-acc9-4aa9-a607-b8b2d8a1d75d
+		summarizeBy: sum
+		sourceColumn: Total_Transactions
+
+		annotation SummarizationSetBy = Automatic
+
+	column Total_Fraud_Transactions
+		dataType: double
+		lineageTag: 77b4f2e9-d4b4-4b36-b5af-d5018ad8c135
+		summarizeBy: sum
+		sourceColumn: Total_Fraud_Transactions
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column fraud_rate_percentage
+		dataType: double
+		lineageTag: 44a364ed-8798-476a-8fa5-a3cce2d66b61
+		summarizeBy: sum
+		sourceColumn: fraud_rate_percentage
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition transaction_summary = m
+		mode: import
+		source =
+				let
+				    Source = Odbc.DataSource("dsn=localhost", [HierarchicalNavigation=true]),
+				    fraud_analysis_Database = Source{[Name="fraud_analysis",Kind="Database"]}[Data],
+				    transaction_summary_View = fraud_analysis_Database{[Name="transaction_summary",Kind="View"]}[Data]
+				in
+				    transaction_summary_View
+

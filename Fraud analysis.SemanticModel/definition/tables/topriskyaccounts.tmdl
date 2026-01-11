@@ -1,0 +1,31 @@
+table topriskyaccounts
+	lineageTag: aefe046e-6078-48cc-a409-71ce9a7ee660
+
+	column Name_Orig
+		dataType: string
+		lineageTag: 2c4d5395-74a2-4ebb-b222-04269c7d5500
+		summarizeBy: none
+		sourceColumn: Name_Orig
+
+		annotation SummarizationSetBy = Automatic
+
+	column Total_Fraud_Amount
+		dataType: double
+		lineageTag: ef2988ca-c285-4dac-966d-4a91bd0a44f9
+		summarizeBy: sum
+		sourceColumn: Total_Fraud_Amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition topriskyaccounts = m
+		mode: import
+		source =
+				let
+				    Source = Odbc.DataSource("dsn=localhost", [HierarchicalNavigation=true]),
+				    fraud_analysis_Database = Source{[Name="fraud_analysis",Kind="Database"]}[Data],
+				    topriskyaccounts_View = fraud_analysis_Database{[Name="topriskyaccounts",Kind="View"]}[Data]
+				in
+				    topriskyaccounts_View
+

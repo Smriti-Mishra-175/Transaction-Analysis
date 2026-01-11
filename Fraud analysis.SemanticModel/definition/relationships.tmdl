@@ -1,0 +1,14 @@
+relationship AutoDetected_06012faa-392a-4b43-941e-0a18f3657183
+	fromColumn: fraud_data.Step
+	toColumn: time_series_fraud.step
+
+relationship AutoDetected_942a8678-8226-49df-ba55-3cdb34f754f1
+	fromColumn: fraud_data.Type
+	toColumn: fraudbytype.Type
+
+relationship AutoDetected_61f04d53-613d-4a31-a557-bce590042f42
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: topriskyaccounts.Name_Orig
+	toColumn: fraudfundflow.Name_Orig
+
